@@ -35,4 +35,4 @@ make -j "$(nproc)" deb-pkg KDEB_PKGVERSION="$(make kernelversion)-1~${ORG}${VERS
 
 cp ../*.deb "${ARTIFACTS}"
 # test install
-apt install "${APT_GET_OPTS[@]}" ../*.deb
+apt-get install "${APT_GET_OPTS[@]}" ../*.deb
