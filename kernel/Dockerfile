@@ -10,6 +10,7 @@ RUN apt-get update \
     build-essential \
     ca-certificates \
     curl \
+    dwarves \
     fakeroot \
     flex \
     initramfs-tools \
@@ -18,7 +19,6 @@ RUN apt-get update \
     libperl-dev \
     libssl-dev \
     lsb-release \
-    pahole \
     rsync \
     xz-utils \ 
     2>&1
