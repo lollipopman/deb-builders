@@ -20,7 +20,7 @@ ARTIFACTS+="/${CODENAME}"
 mkdir -p "${ARTIFACTS}"
 
 mkdir -p /source
-curl -s "${TARBALL}" >/source/source.tar
+curl -Ls "${TARBALL}" >/source/source.tar
 tar xf /source/source.tar -C /source
 
 pushd /source/*linux* >/dev/null
