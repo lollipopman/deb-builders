@@ -6,6 +6,9 @@ set -o errexit
 
 KERNEL_VERSION=$VERSION
 
+declare -a APT_GET_OPTS=(
+	--allow-downgrades
+)
 export DEBEMAIL="jhathaway@wikimedia.org"
 export DEBFULLNAME="Jesse Hathaway"
 
