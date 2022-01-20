@@ -5,7 +5,7 @@ CODENAMES?=bullseye
 VERSION?=5.10.46
 EXTRA_VERSION?=1
 ORG?=wmf
-TAR_BALL?=https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-${VERSION}.tar.xz 
+TARBALL?=https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-${VERSION}.tar.xz
 
 .PHONY: build_container
 build_container:
@@ -27,7 +27,7 @@ build_kernel:
 			-e CONFIG=$(CONFIG) \
 			-e EXTRA_VERSION=$(EXTRA_VERSION) \
 			-e ORG=$(ORG) \
-			-e TAR_BALL=$(TAR_BALL) \
+			-e TARBALL=$(TARBALL) \
 			localhost/kernel_$(CODENAME):latest ; \
 	)
 	tree $(ARTIFACTS)

@@ -20,10 +20,10 @@ ARTIFACTS+="/${CODENAME}"
 mkdir -p "${ARTIFACTS}"
 
 mkdir -p /source
-curl -s "${TAR_BALL}" >/source/linux.tar.xz
-tar xf /source/linux.tar.xz -C /source
+curl -s "${TARBALL}" >/source/source.tar
+tar xf /source/source.tar -C /source
 
-pushd "/source/linux-${KERNEL_VERSION}" >/dev/null
+pushd /source/*linux* >/dev/null
 
 mkdir -p debian/certs/
 cp /debian-uefi-certs.pem debian/certs
