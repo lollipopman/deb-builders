@@ -7,6 +7,7 @@ set -o errexit
 KERNEL_VERSION=$VERSION
 
 declare -a APT_GET_OPTS=(
+	--assume-yes
 	--allow-downgrades
 )
 export DEBEMAIL="jhathaway@wikimedia.org"
@@ -34,5 +35,6 @@ make olddefconfig
 make -j "$(nproc)" deb-pkg KDEB_PKGVERSION="$(make kernelversion)-1~${ORG}${VERSION_ID}+${EXTRA_VERSION}"
 
 cp ../*.deb "${ARTIFACTS}"
+
 # test install
 apt-get install "${APT_GET_OPTS[@]}" ../*.deb
