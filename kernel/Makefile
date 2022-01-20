@@ -20,7 +20,7 @@ build_container:
 build_kernel:
 	mkdir -p $(ARTIFACTS)
 	$(foreach CODENAME,$(CODENAMES), \
-		nice -n 19 podman run --rm \
+		podman run --rm \
 			-v $(ARTIFACTS):/artifacts \
 			-v $(CONFIGS):/configs \
 			-e VERSION=$(VERSION) \
