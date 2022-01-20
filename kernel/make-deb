@@ -1,0 +1,49 @@
+#!/bin/bash -x
+
+set -o nounset
+set -o pipefail
+set -o errexit
+
+KERNEL_VERSION=$VERSION
+
+export DEBEMAIL="jhathaway@wikimedia.org"
+export DEBFULLNAME="Jesse Hathaway"
+
+source /etc/os-release
+IFS=' ()' read -r _ CODENAME <<<"${VERSION}"
+
+ARTIFACTS="${ARTIFACTS:-/artifacts}"
+ARTIFACTS+="/${CODENAME}"
+mkdir -p "${ARTIFACTS}"
+
+mkdir -p /source
+curl -s "${TAR_BALL}" >/source/linux.tar.xz
+tar xf /source/linux.tar.xz -C /source
+
+pushd "/source/linux-${KERNEL_VERSION}" >/dev/null
+
+mkdir -p debian/certs/
+cp /debian-uefi-certs.pem debian/certs
+cp "/configs/${CONFIG}" .config
+make olddefconfig
+# COPY perf_build.sh /source/linux-${version}/
+
+make -j "$(nproc)" deb-pkg KDEB_PKGVERSION="$(make kernelversion)-1~${ORG}${VERSION_ID}+${EXTRA_VERSION}"
+
+# Existing Debian kernel packages all end in the "-amd64" suffix, and our
+# puppetry assumes this is the case. This modifies the built kernel packages to
+# add the expected suffix to the package name before they're published
+for deb_archive in ../*.deb; do
+	if [[ $deb_archive == *linux-libc-dev* ]]; then
+		continue
+	fi
+
+	unpack_dir="$(mktemp -d)"
+	dpkg-deb -R "$deb_archive" "$unpack_dir"
+	sed -i -e '/^Package:/ s/$/-amd64/' "$unpack_dir/DEBIAN/control"
+	dpkg -b "$unpack_dir" "$deb_archive"
+done
+
+cp ../*.deb "${ARTIFACTS}"
+# test install
+apt install "${APT_GET_OPTS[@]}" ../*.deb
