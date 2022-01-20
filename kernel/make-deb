@@ -33,20 +33,6 @@ make olddefconfig
 
 make -j "$(nproc)" deb-pkg KDEB_PKGVERSION="$(make kernelversion)-1~${ORG}${VERSION_ID}+${EXTRA_VERSION}"
 
-# Existing Debian kernel packages all end in the "-amd64" suffix, and our
-# puppetry assumes this is the case. This modifies the built kernel packages to
-# add the expected suffix to the package name before they're published
-for deb_archive in ../*.deb; do
-	if [[ $deb_archive == *linux-libc-dev* ]]; then
-		continue
-	fi
-
-	unpack_dir="$(mktemp -d)"
-	dpkg-deb -R "$deb_archive" "$unpack_dir"
-	sed -i -e '/^Package:/ s/$/-amd64/' "$unpack_dir/DEBIAN/control"
-	dpkg -b "$unpack_dir" "$deb_archive"
-done
-
 cp ../*.deb "${ARTIFACTS}"
 # test install
 apt install "${APT_GET_OPTS[@]}" ../*.deb
