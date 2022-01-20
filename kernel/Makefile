@@ -13,7 +13,7 @@ build_container:
 	$(foreach CODENAME,$(CODENAMES), \
 		buildah build \
 			--build-arg CODENAME=$(CODENAME) \
-			-t kernel_$(CODENAME)_$(VERSION) ; \
+			-t kernel_$(CODENAME) ; \
 	)
 
 .PHONY: build_kernel
@@ -28,6 +28,6 @@ build_kernel:
 			-e EXTRA_VERSION=$(EXTRA_VERSION) \
 			-e ORG=$(ORG) \
 			-e TAR_BALL=$(TAR_BALL) \
-			localhost/kernel_$(CODENAME)_$(VERSION):latest ; \
+			localhost/kernel_$(CODENAME):latest ; \
 	)
 	tree $(ARTIFACTS)
